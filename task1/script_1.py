@@ -46,8 +46,10 @@ for file in all_file:
     xml_file = file
     tree = etree.parse(xml_file)
     root = tree.getroot()
-    count_max_img += len(tree.xpath(f"//image[@width={max_img.attrib['width']} and @height={max_img.attrib['height']}]"))
-    count_min_img += len(tree.xpath(f"//image[@width={min_img.attrib['width']} and @height={min_img.attrib['height']}]"))
+    count_max_img += len(tree.xpath(f"//image[@width={max_img.attrib['width']} and @height={max_img.attrib['height']}"
+                                    f" or @width={max_img.attrib['height']} and @height={max_img.attrib['width']} ]"))
+    count_min_img += len(tree.xpath(f"//image[@width={min_img.attrib['width']} and @height={min_img.attrib['height']}"
+                                    f" or @width={min_img.attrib['height']} and @height={min_img.attrib['width']} ]"))
 
 
 print('Общее количество изображений: ' + str(count_all_img))
