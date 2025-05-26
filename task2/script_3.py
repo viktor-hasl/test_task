@@ -48,3 +48,4 @@ for image in coco_data["images"]:
                 f.write(f"{category_id} {x_center:.6f} {y_center:.6f} {width:.6f} {height:.6f}\n")
 
 print("Конвертация завершена! YOLO-аннотации сохранены в", yolo_output_dir)
+

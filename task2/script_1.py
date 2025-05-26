@@ -8,7 +8,9 @@ with open('annotations/instances_train.json', 'r') as f:
 
 
 imgs = {}
+# Перебираем аннотации
 for annot in annotations['annotations']:
+    # Добавляем id картинки в словарь, если его нет, со значением категории
     if not annot['image_id'] in imgs.keys():
         category_name = next(
             (category["name"] for category in annotations['categories'] if category['id'] == annot['category_id']),
@@ -28,19 +30,23 @@ for annot in annotations['annotations']:
 for img_annotation in annotations['images']:
     if img_annotation['id'] in imgs.keys():
         name_folder = '_'.join(sorted(imgs[img_annotation['id']]))
-        img_annotation['coco_url'] = 'images/' + name_folder + '/'
-        if not os.path.exists(img_annotation['coco_url']):
-            os.makedirs(img_annotation['coco_url'])
+        name_file = img_annotation['file_name']
+        img_annotation['file_name'] = 'images/' + name_folder + '/'
+        if not os.path.exists(img_annotation['file_name']):
+            os.makedirs(img_annotation['file_name'])
         try:
-            shutil.move('images/train/' + img_annotation['file_name'], img_annotation['coco_url'])
+            shutil.move('images/train/' + name_file, img_annotation['file_name'])
         except shutil.Error:
             print(f"Файл {img_annotation['file_name']} уже есть")
+        img_annotation['file_name'] += name_file
     else:
-        img_annotation['coco_url'] = 'images/'
+        name_file = img_annotation['file_name']
+        img_annotation['file_name'] = 'images/'
         try:
-            shutil.move('images/train/' + img_annotation['file_name'], img_annotation['coco_url'])
+            shutil.move('images/train/' + name_file, img_annotation['file_name'])
         except shutil.Error:
             print(f"Файл {img_annotation['file_name']} уже есть")
+        img_annotation['file_name'] += name_file
 
 
 with open('annotations/updated_annotations.json', 'w', encoding='utf-8') as file:
